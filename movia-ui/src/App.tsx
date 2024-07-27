@@ -6,6 +6,7 @@ import {BrowserRouter as Router} from 'react-router-dom'
 import {Routes} from 'react-router-dom'
 import {Route} from 'react-router-dom'
 import {Link} from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
 
 // Reference: https://developer.themoviedb.org/reference/movie-images
 
@@ -50,24 +51,6 @@ const MovieGrid = () => {
         </div>
       ))}
     </main>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <h1>Movia</h1>
-    //   </header>
-    //   <div className="container">
-    //     <main className="Movie-grid">
-    //       {movies.map((movie) => (
-    //         <div key={movie.id} className="Movie-item">
-    //           <img
-    //             src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-    //             alt={movie.title}
-    //           />
-    //           <p>{movie.title}</p>
-    //         </div>
-    //       ))}
-    //     </main>
-    //   </div>
-    // </div>
   );
 }
 
@@ -89,7 +72,8 @@ const App = () => {
       </header>
       {/* Part 3: Routes - Mapping a path to a component above */}
       <Routes>
-        <Route path="/" element={<MovieGrid />} />
+        <Route path="/" element={<Navigate replace to="/select-movies" />} />
+        <Route path="/select-movies" element={<MovieGrid />} />
         <Route path="recommendations" element={<Recommendations />} />
       </Routes>
       {/* Part 4: Clickable link in the application */}
@@ -98,25 +82,6 @@ const App = () => {
       </Link>
     </Router>
   )
-
-  // <div className="App">
-  //   <header className="App-header">
-  //     <h1>Movia</h1>
-  //   </header>
-  //   <div className="container">
-  //     <main className="Movie-grid">
-  //       {movies.map((movie) => (
-  //         <div key={movie.id} className="Movie-item">
-  //           <img
-  //             src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-  //             alt={movie.title}
-  //           />
-  //           <p>{movie.title}</p>
-  //         </div>
-  //       ))}
-  //     </main>
-  //   </div>
-  // </div>
 }
 
 export default App;
