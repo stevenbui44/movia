@@ -19,7 +19,7 @@ const MovieGrid = () => {
   // Part 2: Initialize selected movies as an empty number[] array of movie IDs
   const [selectedMovies, setSelectedMovies] = useState<number[]>([])
 
-  // useEffect hook, which runs only once when the program is rendered
+  // useEffect hook, which gets a list of top 20 movies one time when the program is rendered
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -35,9 +35,15 @@ const MovieGrid = () => {
     fetchMovies();
   }, []);
 
+  // usEffect hook, which prints selectedMovies every time it is updated
+  // useEffect(() => {
+  //   console.log(selectedMovies);
+  // }, [selectedMovies]);
+
+
   // Part 3: Function to select a movie
   const toggleMovieSelection = (movieId:number) => {
-    logMovieTitle(movieId);
+    // logMovieTitle(movieId);
     setSelectedMovies((prevSelected) => {
       const isSelected = prevSelected.includes(movieId)
       const updatedSelection = isSelected 
@@ -51,7 +57,7 @@ const MovieGrid = () => {
   const logMovieTitle = (movieId: number) => {
     const movie = movies.find(m => m.id === movieId);
     if (movie) {
-      console.log(`${movie.title}`);
+      console.log(movieId, `: ${movie.title}`);
     } else {
       console.log(`No movie found with ID: ${movieId}`);
     }
