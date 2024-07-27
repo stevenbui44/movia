@@ -1,11 +1,7 @@
 import './App.css';
-// import {useState} from "react";
-// import {useEffect} from "react";
-// import axios from 'axios';
 import {BrowserRouter as Router} from 'react-router-dom'
 import {Routes} from 'react-router-dom'
 import {Route} from 'react-router-dom'
-// import {Link} from 'react-router-dom'
 import {Navigate} from 'react-router-dom'
 
 // Reference: https://developer.themoviedb.org/reference/movie-images
