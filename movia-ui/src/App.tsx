@@ -2,6 +2,10 @@ import './App.css';
 import {useState} from "react";
 import {useEffect} from "react";
 import axios from 'axios';
+import {BrowserRouter as Router} from 'react-router-dom'
+import {Routes} from 'react-router-dom'
+import {Route} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 // Reference: https://developer.themoviedb.org/reference/movie-images
 
@@ -11,7 +15,8 @@ type Movie = {
   poster_path: string;
 }
 
-const App = () => {
+// Component 1: Movie page
+const MovieGrid = () => {
 
   // Part 1: Initialize the list of movies as an empty Movie[] array
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -34,25 +39,84 @@ const App = () => {
 
   // Part 2: HTML 
   return (
-    <div className="App">
+    <main className="Movie-grid">
+      {movies.map((movie) => (
+        <div key={movie.id} className="Movie-item">
+          <img
+            src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+            alt={movie.title}
+          />
+          <p>{movie.title}</p>
+        </div>
+      ))}
+    </main>
+    // <div className="App">
+    //   <header className="App-header">
+    //     <h1>Movia</h1>
+    //   </header>
+    //   <div className="container">
+    //     <main className="Movie-grid">
+    //       {movies.map((movie) => (
+    //         <div key={movie.id} className="Movie-item">
+    //           <img
+    //             src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+    //             alt={movie.title}
+    //           />
+    //           <p>{movie.title}</p>
+    //         </div>
+    //       ))}
+    //     </main>
+    //   </div>
+    // </div>
+  );
+}
+
+// Component 2: Recommendations Page (TODO: Change to have actual code)
+const Recommendations = () => {
+  return (
+    <h2>Recommendations Page</h2>
+  )
+}
+
+// Component 3: Main application
+const App = () => {
+  return (
+    // Part 1: Router - Main component to wrap entire application
+    <Router>
+      {/* Part 2: Put this header on every page */}
       <header className="App-header">
         <h1>Movia</h1>
       </header>
-      <div className="container">
-        <main className="Movie-grid">
-          {movies.map((movie) => (
-            <div key={movie.id} className="Movie-item">
-              <img
-                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                alt={movie.title}
-              />
-              <p>{movie.title}</p>
-            </div>
-          ))}
-        </main>
-      </div>
-    </div>
-  );
+      {/* Part 3: Routes - Mapping a path to a component above */}
+      <Routes>
+        <Route path="/" element={<MovieGrid />} />
+        <Route path="recommendations" element={<Recommendations />} />
+      </Routes>
+      {/* Part 4: Clickable link in the application */}
+      <Link to="/recommendations" className="Next-button">
+        Next
+      </Link>
+    </Router>
+  )
+
+  // <div className="App">
+  //   <header className="App-header">
+  //     <h1>Movia</h1>
+  //   </header>
+  //   <div className="container">
+  //     <main className="Movie-grid">
+  //       {movies.map((movie) => (
+  //         <div key={movie.id} className="Movie-item">
+  //           <img
+  //             src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+  //             alt={movie.title}
+  //           />
+  //           <p>{movie.title}</p>
+  //         </div>
+  //       ))}
+  //     </main>
+  //   </div>
+  // </div>
 }
 
 export default App;
