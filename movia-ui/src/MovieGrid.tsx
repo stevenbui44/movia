@@ -51,7 +51,7 @@ const MovieGrid = () => {
   const logMovieTitle = (movieId: number) => {
     const movie = movies.find(m => m.id === movieId);
     if (movie) {
-      console.log(`Movie selected: ${movie.title}`);
+      console.log(`${movie.title}`);
     } else {
       console.log(`No movie found with ID: ${movieId}`);
     }
@@ -62,6 +62,7 @@ const MovieGrid = () => {
     <div className="container">
       <main className="Movie-grid">
         {movies.map((movie) => (
+          // Each individual movie
           <div 
             key={movie.id} 
             className={`Movie-item ${selectedMovies.includes(movie.id) ? 'selected' : ''}`}
@@ -69,17 +70,24 @@ const MovieGrid = () => {
               () => toggleMovieSelection(movie.id)
             }
           >
+            {/* Movie poster */}
             <img
               src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
               alt={movie.title}
             />
+            {/* Movie title */}
             <p>{movie.title}</p>
           </div>
         ))}
       </main>
-      <Link to="/recommendations" className="Next-button">
-        Next
-      </Link>
+      {/* Next button only if user selected a movie */}
+      {selectedMovies.length > 0 ? (
+        <Link to="/recommendations" className="Next-button">
+          Next
+        </Link>
+      ) : (
+        <span className="Next-button disabled">Next</span>
+      )}
     </div>
   );
 }
