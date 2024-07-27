@@ -22,9 +22,8 @@ const App = () => {
       try {
         // TMDB API call to get popular movies
         const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1`
+          `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
         );
-        console.log(response.data)
         setMovies(response.data.results);
       } catch (error) {
         console.error('Error fetching movies:', error);
@@ -39,17 +38,19 @@ const App = () => {
       <header className="App-header">
         <h1>Movia</h1>
       </header>
-      <main className="Movie-grid">
-        {movies.map((movie) => (
-          <div key={movie.id} className="Movie-item">
-            <img
-              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-              alt={movie.title}
-            />
-            <p>{movie.title}</p>
-          </div>
-        ))}
-      </main>
+      <div className="container">
+        <main className="Movie-grid">
+          {movies.map((movie) => (
+            <div key={movie.id} className="Movie-item">
+              <img
+                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                alt={movie.title}
+              />
+              <p>{movie.title}</p>
+            </div>
+          ))}
+        </main>
+      </div>
     </div>
   );
 }
