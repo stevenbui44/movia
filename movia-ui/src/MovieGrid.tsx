@@ -2,6 +2,7 @@ import './App.css';
 import {useState} from "react";
 import {useEffect} from "react";
 import axios from 'axios';
+import {Link} from 'react-router-dom'
 
 type Movie = {
   id: number;
@@ -33,17 +34,22 @@ const MovieGrid = () => {
 
   // Part 2: HTML 
   return (
-    <main className="Movie-grid">
-      {movies.map((movie) => (
-        <div key={movie.id} className="Movie-item">
-          <img
-            src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-            alt={movie.title}
-          />
-          <p>{movie.title}</p>
-        </div>
-      ))}
-    </main>
+    <div className="container">
+      <main className="Movie-grid">
+        {movies.map((movie) => (
+          <div key={movie.id} className="Movie-item">
+            <img
+              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+              alt={movie.title}
+            />
+            <p>{movie.title}</p>
+          </div>
+        ))}
+      </main>
+      <Link to="/recommendations" className="Next-button">
+        Next
+      </Link>
+    </div>
   );
 }
 
