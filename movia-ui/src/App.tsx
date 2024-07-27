@@ -3,6 +3,8 @@ import {useState} from "react";
 import {useEffect} from "react";
 import axios from 'axios';
 
+// Reference: https://developer.themoviedb.org/reference/movie-images
+
 type Movie = {
   id: number;
   title: string;
@@ -18,22 +20,20 @@ const App = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-
-        // console.log('API Key:', ${process.env.REACT_APP_TMDB_API_KEY});
-        console.log('API Key:', process.env.REACT_APP_TMDB_API_KEY);
-
+        // TMDB API call to get popular movies
         const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1`
         );
-        setMovies(response.data.results.slice(0, 10));
+        console.log(response.data)
+        setMovies(response.data.results);
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
     };
-
     fetchMovies();
   }, []);
 
+  // Part 2: HTML 
   return (
     <div className="App">
       <header className="App-header">
