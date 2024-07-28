@@ -28,3 +28,4 @@ yarn-error.log*
 movia-server/node_modules/
 movia-ui/node_modules/
 movia-ui/.env
+movia-server/.env
