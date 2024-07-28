@@ -70,6 +70,50 @@ app.delete("/api/movies/:id", async (req, res) => {
   }
 })
 
+// Function 4: GET all liked movies (liked=true)
+app.get("/api/movies/liked", async (req, res) => {
+  try {
+    const movies = await prisma.movie.findMany({
+      where: {
+        liked: true
+      }
+    })
+    if (movies.length === 0) {
+      return res
+        .status(404)
+        .send("No liked movies in /api/movies/liked :(")
+    }
+    res.json(movies)
+  }
+  catch (error) {
+    res
+      .status(500)
+      .send("Error with GET /api/movies/liked with PrismaClient :(")
+  }
+})
+
+// Function 5: GET all disliked movies (liked=false)
+app.get("/api/movies/disliked", async (req, res) => {
+  try {
+    const movies = await prisma.movie.findMany({
+      where: {
+        liked: false
+      }
+    })
+    if (movies.length === 0) {
+      return res
+        .status(404)
+        .send("No disliked movies in /api/movies/disliked :(")
+    }
+    res.json(movies)
+  }
+  catch (error) {
+    res
+      .status(500)
+      .send("Error with GET /api/movies/disliked with PrismaClient :(")
+  }
+})
+
 
 app.listen(5001, () => {
   console.log("server running on port 5001")
