@@ -17,8 +17,7 @@ model Movie {
   id          Int     @id @default(autoincrement())
   tmdb_id     Int     @unique
   title       String
-  poster_path String
   liked       Boolean
   rating      Float
-  genre_ids   Int[]
+  popularity  Float
 }

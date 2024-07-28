@@ -18,11 +18,10 @@ app.get("/api/movies", async (req, res) => {
 app.post("/api/movies", async (req, res) => {
   const tmdb_id = req.body.tmdb_id
   const title = req.body.title
-  const poster_path = req.body.poster_path
   const liked = req.body.liked
   const rating = req.body.rating
-  const genre_ids = req.body.genre_ids
-  if (!tmdb_id || !title || !poster_path || !rating || genre_ids.length === 0) {
+  const popularity = req.body.popularity
+  if (!tmdb_id || !title || !rating || !popularity) {
     return res
       .status(400)
       .send("Invalid fields in POST /api/movies :(")
@@ -32,10 +31,9 @@ app.post("/api/movies", async (req, res) => {
       data: {
         tmdb_id: tmdb_id,
         title: title,
-        poster_path: poster_path,
         liked: liked,
         rating: rating,
-        genre_ids: genre_ids
+        popularity: popularity
       }
     })
     res.json(movie)
