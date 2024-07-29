@@ -98,13 +98,22 @@ const MovieGrid = () => {
           console.log('rating:', movie.vote_average)
           console.log('popularity:', movie.popularity)
           
-          await axios.post('http://localhost:5001/api/movies', {
-            tmdb_id: movie.id,
-            title: movie.title,
-            liked: true,
-            rating: movie.vote_average,
-            popularity: movie.popularity
-          })
+          try {
+            await axios.post('http://localhost:5001/api/movies', {
+              tmdb_id: movie.id,
+              title: movie.title,
+              liked: true,
+              rating: movie.vote_average,
+              popularity: movie.popularity
+            })
+          }
+          catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 500) {
+              console.log(`Movie already exists in database: ${movie.title}`)
+            } else {
+              console.error(`Error adding movie ${movie.title}:`, error)
+            }
+          }
 
 
         }
@@ -114,11 +123,6 @@ const MovieGrid = () => {
       console.log('Error handling next: ', error)
     }
   }
-
-
-
-
-
 
 
 
@@ -182,4 +186,3 @@ const MovieGrid = () => {
 }
 
 export default MovieGrid
-
