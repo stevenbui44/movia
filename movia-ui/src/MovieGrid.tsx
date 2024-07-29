@@ -3,12 +3,16 @@ import {useState} from "react";
 import {useEffect} from "react";
 import axios from 'axios';
 import {Link} from 'react-router-dom'
+import { populate } from 'dotenv';
 
 type Movie = {
-  id: number;
-  title: string;
-  poster_path: string;
-  liked: boolean;
+  id: number
+  poster_path: string
+  tmdb_id: number
+  title: string
+  liked: boolean
+  vote_average: number
+  popularity: number
 }
 
 // Component 1: Movie page
@@ -36,11 +40,12 @@ const MovieGrid = () => {
     fetchMovies();
   }, []);
 
-  // usEffect hook, which prints selectedMovies every time it is updated
+  // usEffect hook: Print out selectedMovies every time it is updated
   // useEffect(() => {
   //   console.log(selectedMovies);
   // }, [selectedMovies]);
 
+  // useEffect hook: Print out information on each movie when selected
   // useEffect(() => {
   //   if (selectedMovies.length > 0) {
   //     // Get the last added movie ID
@@ -56,101 +61,7 @@ const MovieGrid = () => {
   // }, [selectedMovies, movies]);
 
 
-  // Keywords 
-  // useEffect(() => {
-  //   const fetchAndLogKeywords = async (movieId: number) => {
-  //     try {
-  //       const response = await axios.get(
-  //         `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-  //       );
-  //       const keywords = response.data.keywords.map((keyword: { name: string }) => keyword.name);
-  //       console.log(`Keywords for movie ${movieId}:`, keywords);
-  //     } catch (error) {
-  //       console.error('Error fetching keywords:', error);
-  //     }
-  //   };
-  //   if (selectedMovies.length > 0) {
-  //     // Get the last added movie ID
-  //     const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
-  //     fetchAndLogKeywords(lastAddedMovieId);
-  //   } else {
-  //     // If selectedMovies is empty, a movie was just removed
-  //     console.log("All movies deselected");
-  //   }
-  // }, [selectedMovies]);
-
-
-  // Similar movies 
-  // useEffect(() => {
-  //   const fetchAndLogSimilarMovies = async (movieId: number) => {
-  //     try {
-  //       const response = await axios.get(
-  //         `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-  //       );
-  //       const similarMovies = response.data.results.map((movie: { id: number, title: string }) => ({
-  //         id: movie.id,
-  //         title: movie.title
-  //       }));
-  //       console.log(`Similar movies for movie ${movieId}:`, similarMovies);
-  //     } catch (error) {
-  //       console.error('Error fetching similar movies:', error);
-  //     }
-  //   };
-  //   if (selectedMovies.length > 0) {
-  //     // Get the last added movie ID
-  //     const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
-  //     fetchAndLogSimilarMovies(lastAddedMovieId);
-  //   } else {
-  //     // If selectedMovies is empty, a movie was just removed
-  //     console.log("All movies deselected");
-  //   }
-  // }, [selectedMovies]);
-
-  // Movies that have one specific keyword
-  // useEffect(() => {
-  //   const fetchAndLogMoviesByKeyword = async (movieId: number) => {
-  //     try {
-  //       // First, fetch keywords for the movie
-  //       const keywordsResponse = await axios.get(
-  //         `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-  //       );
-  //       if (keywordsResponse.data.keywords.length > 0) {
-  //         // Take the first keyword
-  //         const firstKeyword = keywordsResponse.data.keywords[0];
-  //         console.log(`Using keyword: ${firstKeyword.name} (ID: ${firstKeyword.id})`);
-  //         // Fetch movies for this keyword
-  //         const moviesResponse = await axios.get(
-  //           `https://api.themoviedb.org/3/keyword/${firstKeyword.id}/movies?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-  //         );
-  //         const movies = moviesResponse.data.results.map((movie: { id: number, title: string }) => ({
-  //           id: movie.id,
-  //           title: movie.title
-  //         }));
-  //         console.log(`Movies with keyword "${firstKeyword.name}":`, movies);
-  //       } else {
-  //         console.log(`No keywords found for movie ${movieId}`);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching movies by keyword:', error);
-  //     }
-  //   };
-  //   if (selectedMovies.length > 0) {
-  //     // Get the last added movie ID
-  //     const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
-  //     fetchAndLogMoviesByKeyword(lastAddedMovieId);
-  //   } else {
-  //     // If selectedMovies is empty, a movie was just removed
-  //     console.log("All movies deselected");
-  //   }
-  // }, [selectedMovies]);
-
-  
-
-
-  
-
-
-  // Part 3: Function to select a movie
+  // Function 1: Function to select/deselect a movie
   const toggleMovieSelection = (movieId:number) => {
     // logMovieTitle(movieId);
     setSelectedMovies((prevSelected) => {
@@ -162,7 +73,7 @@ const MovieGrid = () => {
     })
   }
 
-  // Part 3.5: Helper function to print out the movie name given its ID
+  // Function 1.1: Helper function to print out the movie name given its ID
   const logMovieTitle = (movieId: number) => {
     const movie = movies.find(m => m.id === movieId);
     if (movie) {
@@ -171,6 +82,66 @@ const MovieGrid = () => {
       console.log(`No movie found with ID: ${movieId}`);
     }
   };
+
+
+  // Function 2: Function to make POST calls when you press 'Next'
+  const handleNext = async () => {
+    console.log('inside handleNext')
+    try {
+      for (const movieId of selectedMovies) {
+        const movie = movies.find(m => m.id === movieId)
+        // if we can retrieve data (movie), then make the POST call
+        if (movie) {
+          console.log('movie:', movie)
+          console.log('tmdb_id:', movie.id)
+          console.log('title:', movie.title)
+          console.log('liked:', true)
+          console.log('rating:', movie.vote_average)
+          console.log('popularity:', movie.popularity)
+
+          
+          await axios.post('http://localhost:5001/api/movies', {
+            // method: 'POST',
+            // headers: {
+            //   'Content-Type': 'application/json'
+            // },
+            // body: JSON.stringify({
+            tmdb_id: movie.id,
+            title: movie.title,
+            liked: true,
+            rating: movie.vote_average,
+            popularity: movie.popularity
+
+            //   tmdb_id: 2400,
+            //   title: 'movie 2',
+            //   liked: true,
+            //   rating: 10.000,
+            //   popularity: 20.000
+            // })
+
+            // tmdb_id: 2400,
+            // title: 'movie 2',
+            // liked: true,
+            // rating: 10.000,
+            // popularity: 20.000
+
+          })
+
+
+        }
+      }
+    }
+    catch (error) {
+      console.log('Error handling next: ', error)
+    }
+  }
+
+
+
+
+
+
+
 
   // Part 4: HTML 
   return (
@@ -195,9 +166,33 @@ const MovieGrid = () => {
           </div>
         ))}
       </main>
+
+      {/* Row at bottom for selected movies */}
+      <div className="Selected-movies-row">
+        {selectedMovies.map((id) => {
+          const movie = movies.find(m => m.id === id);
+          return movie ? (
+            <img 
+              key={id}
+              src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
+            />
+          ) : null;
+        })}
+      </div>
+
       {/* Next button only if user selected a movie */}
       {selectedMovies.length > 0 ? (
-        <Link to="/recommendations" className="Next-button">
+        <Link to="/recommendations" className="Next-button"
+            // onClick={(e) => {
+            //   e.preventDefault()
+            //   handleNext().then(() => {
+            //     window.location.href = '/recommendations'
+            //   })
+            // }}>
+            onClick={(e) => {
+              e.preventDefault()
+              handleNext()
+            }}>
           Next
         </Link>
       ) : (
