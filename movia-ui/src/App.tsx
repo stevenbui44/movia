@@ -9,6 +9,7 @@ import {Navigate} from 'react-router-dom'
 // Component 1: Imports
 import MovieGrid from './MovieGrid'
 import Recommendations from './Recommendations'
+import Settings from './Settings'
 
 // Component 2: Main application
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/" element={<Navigate replace to="/select-movies" />} />
         <Route path="/select-movies" element={<MovieGrid />} />
         <Route path="recommendations" element={<Recommendations />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   )

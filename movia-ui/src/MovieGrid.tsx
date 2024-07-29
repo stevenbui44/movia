@@ -3,7 +3,6 @@ import {useState} from "react";
 import {useEffect} from "react";
 import axios from 'axios';
 import {Link} from 'react-router-dom'
-import { populate } from 'dotenv';
 
 type Movie = {
   id: number
@@ -24,7 +23,7 @@ const MovieGrid = () => {
   // Part 2: Initialize selected movies as an empty number[] array of movie IDs
   const [selectedMovies, setSelectedMovies] = useState<number[]>([])
 
-  // useEffect hook, which gets a list of top 20 movies one time when the program is rendered
+  // useEffect hook: Gets a list of top 20 movies one time when the program is rendered
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -98,33 +97,13 @@ const MovieGrid = () => {
           console.log('liked:', true)
           console.log('rating:', movie.vote_average)
           console.log('popularity:', movie.popularity)
-
           
           await axios.post('http://localhost:5001/api/movies', {
-            // method: 'POST',
-            // headers: {
-            //   'Content-Type': 'application/json'
-            // },
-            // body: JSON.stringify({
             tmdb_id: movie.id,
             title: movie.title,
             liked: true,
             rating: movie.vote_average,
             popularity: movie.popularity
-
-            //   tmdb_id: 2400,
-            //   title: 'movie 2',
-            //   liked: true,
-            //   rating: 10.000,
-            //   popularity: 20.000
-            // })
-
-            // tmdb_id: 2400,
-            // title: 'movie 2',
-            // liked: true,
-            // rating: 10.000,
-            // popularity: 20.000
-
           })
 
 
@@ -203,3 +182,4 @@ const MovieGrid = () => {
 }
 
 export default MovieGrid
+
