@@ -59,6 +59,33 @@ const MovieGrid = () => {
   //   }
   // }, [selectedMovies, movies]);
 
+  useEffect(() => {
+    const fetchAndLogKeywords = async (movieId: number) => {
+      try {
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+        );
+        const keywords = response.data.keywords.map((keyword: { name: string }) => keyword.name);
+        console.log(`Keywords for movie ${movieId}:`, keywords);
+      } catch (error) {
+        console.error('Error fetching keywords:', error);
+      }
+    };
+
+    if (selectedMovies.length > 0) {
+      // Get the last added movie ID
+      const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
+      const movie = movies.find(m => m.id === lastAddedMovieId);
+      if (movie) {
+        fetchAndLogKeywords(movie.id);
+      }
+    } else {
+      // If selectedMovies is empty, a movie was just removed
+      console.log("All movies deselected");
+    }
+  }, [selectedMovies, movies]);
+
+
 
   // Function 1: Function to select/deselect a movie
   const toggleMovieSelection = (movieId:number) => {
@@ -85,7 +112,6 @@ const MovieGrid = () => {
 
   // Function 2: Function to make POST calls when you press 'Next'
   const handleNext = async () => {
-    console.log('inside handleNext')
     try {
       for (const movieId of selectedMovies) {
         const movie = movies.find(m => m.id === movieId)
@@ -166,16 +192,16 @@ const MovieGrid = () => {
       {/* Next button only if user selected a movie */}
       {selectedMovies.length > 0 ? (
         <Link to="/recommendations" className="Next-button"
-            // onClick={(e) => {
-            //   e.preventDefault()
-            //   handleNext().then(() => {
-            //     window.location.href = '/recommendations'
-            //   })
-            // }}>
             onClick={(e) => {
               e.preventDefault()
-              handleNext()
+              handleNext().then(() => {
+                window.location.href = '/recommendations'
+              })
             }}>
+            {/* onClick={(e) => {
+              e.preventDefault()
+              handleNext()
+            }}> */}
           Next
         </Link>
       ) : (
