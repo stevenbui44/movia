@@ -48,10 +48,13 @@ const Recommendations:React.FC = () => {
   const [popupMovie, setPopupMovie] = useState<TMDBMovie | null>(null);
   const [genres, setGenres] = useState<Genre[]>([]);
 
+  const [dislikedMovies, setDislikedMovies] = useState<Movie[]>([]);
 
-  // useEffect hook: Gets all sets of movie recommendations
+
+  // useEffect hook: Gets genres + disliked movies first, then all sets of movie recommendations
   useEffect(() => {
     fetchGenres();
+    fetchDislikedMovies();
     fetchLikedMoviesAndRecommendations();
   }, []);
 
@@ -59,6 +62,10 @@ const Recommendations:React.FC = () => {
   // Function 1: Main function to get liked movies and recommendations based on those movies
   const fetchLikedMoviesAndRecommendations = async () => {
     try {
+
+      const dislikedMoviesList = await fetchDislikedMovies();
+      console.log('dislikedMoviesList:', dislikedMoviesList)
+
       // JSON object of movies, headers, request, status
       const response = await axios.get<Movie[]>(
         'http://localhost:5001/api/movies/liked'
@@ -69,13 +76,25 @@ const Recommendations:React.FC = () => {
       // Promise[]
       // for each Movie, get recommended TMDBMovies using TMDB API
       const recommendationPromises = likedMovies.map(async (movie) => {
+        // Step 1: Get all recommended movies
         const similarMoviesResponse = await axios.get<{ results:TMDBMovie[] }>(
           `https://api.themoviedb.org/3/movie/${movie.tmdb_id}/recommendations?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
         );
+
+        console.log('before: ', similarMoviesResponse)
+
+        // Step 2: Filter out movies in disliked list
+        const filteredRecommendations = similarMoviesResponse.data.results.filter(
+          (recommendation) => !dislikedMoviesList.some((disliked) => disliked.tmdb_id === recommendation.id)
+        );
+
+        console.log(dislikedMoviesList)
+        console.log('after: ', filteredRecommendations)
+        console.log('- - - - - - - - - - -')
         // return the RecommendationSet
         return {
           originalMovie: movie,
-          recommendations: similarMoviesResponse.data.results.slice(0, 5)
+          recommendations: filteredRecommendations.slice(0, 5)
         };
       });
 
@@ -134,6 +153,17 @@ const Recommendations:React.FC = () => {
     }
   };
 
+  // Function 7: Get and return user's disliked movies
+  const fetchDislikedMovies = async () => {
+    try {
+      const response = await axios.get<Movie[]>('http://localhost:5001/api/movies/disliked');
+      setDislikedMovies(response.data);
+      return response.data
+    } catch (error) {
+      console.error('Error fetching disliked movies:', error);
+      return []
+    }
+  };
 
 
   if (loading) return <div>Loading...</div>
