@@ -20,6 +20,28 @@
   padding: 20px;
 }
 
+/* In Recommendations.tsx, the 'x' dislike button to the top right of each recommended  */
+.dislike-button {
+  position: absolute;   /* Make button start in the top left corner rather than centered at the top*/
+  top: -15px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  background-color: rgb(216, 216, 216);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 1000;
+}
+/* In Recommendations.tsx, the 'x' dislike button gets darker when you hover over it */
+.dislike-button:hover {
+  background-color:  rgb(181, 181, 181);
+}
+
+
 /* In Recommendations.tsx, the overall list (make it one row) */
 .genres ul {
   display: flex;
@@ -86,6 +108,8 @@ li {
   text-align: center;
   width: 200px;
   cursor: pointer;
+  position: relative;
+  margin-top: 15px;
 }
 /* In Recommendations.tsx, the movie poster */
 .movie-card img {
@@ -191,6 +215,10 @@ li {
 /* In Recommendations.tsx, the space between each RecommendationSet */
 .recommendation-set {
   margin-bottom: 20px;
+}
+/* In Recommendations.tsx, the space between the RecommendationSet 'Since you liked' and the movie posters */
+.recommendation-set h2 {
+  margin-bottom: 10px;
 }
 
 .Selected-movies-row {

@@ -119,6 +119,20 @@ const Recommendations:React.FC = () => {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+  // Function 6: Make a POST call with liked=false if the user presses the 'x' button
+  const putMovieInDislikedMovies = async (movie: TMDBMovie) => {
+    try {
+      await axios.post('http://localhost:5001/api/movies', {
+        tmdb_id: movie.id,
+        title: movie.title,
+        liked: false,
+        rating: movie.vote_average,
+        popularity: movie.popularity
+      });
+    } catch (error) {
+      console.error('Error disliking movie:', error);
+    }
+  };
 
 
 
@@ -133,17 +147,30 @@ const Recommendations:React.FC = () => {
         <div key={set.originalMovie.id} className="recommendation-set">
           <h2>Since you liked <i>{set.originalMovie.title}</i>...</h2>
           <div className="movie-row">
+
+            {/* for each movie, have the 'x' button and the movie poster */}
             {set.recommendations.map((movie) => (
-              <div key={movie.id} className="movie-card" onClick={
-                () => openPopup(movie)
-              }>
-                <img 
-                  src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} 
-                  alt={movie.title} 
-                />
-                <p>{movie.title}</p>
+              <div key={movie.id} className="movie-card">
+                {/* 'x' button */}
+                <div className="dislike-button" onClickCapture={(e) => {
+                  e.stopPropagation()
+                  putMovieInDislikedMovies(movie)
+                }}>
+                  &times;
+                </div>
+                {/* movie poster */}
+                <div onClick={
+                  () => openPopup(movie)
+                }>
+                  <img 
+                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} 
+                    alt={movie.title} 
+                  />
+                  <p>{movie.title}</p>
+                </div>
               </div>
             ))}
+
           </div>
         </div>
       ))}
