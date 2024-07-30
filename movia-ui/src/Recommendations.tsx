@@ -162,24 +162,29 @@ const Recommendations:React.FC = () => {
               />
             </div>
 
-            {/* Row 2: Title, rating, and date */}
-            <div className="popup-row popup-info">
+            {/* Row 2: Title */}
+            <div className="popup-row popup-title">
               <h2>{popupMovie.title}</h2>
-              <p className="rating-date">
-                Rating: {popupMovie.vote_average.toFixed(1)}/10 | 
-                Released: {formatDate(popupMovie.release_date)}
-              </p>
             </div>
 
-            {/* Row 3: Overview */}
+            {/* Row 3: Rating and date */}
+            <div className="popup-row popup-info">
+              <div className="popup-info-item">
+                <p>Rating: {popupMovie.vote_average.toFixed(2)}/10</p>
+              </div>
+              <div className="popup-info-item">
+                <p>{formatDate(popupMovie.release_date)}</p>
+              </div>
+            </div>
+
+            {/* Row 4: Overview */}
             <div className="popup-row">
               <p className="overview">{popupMovie.overview}</p>
             </div>
 
-            {/* Row 4: */}
+            {/* Row 5: Genres */}
             <div className="popup-row">
               <div className="genres">
-                <h3>Genres:</h3>
                 <ul>
                   {popupMovie.genre_ids.map((genreId) => {
                     const genre = genres.find(g => g.id === genreId);

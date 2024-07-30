@@ -20,6 +20,20 @@
   padding: 20px;
 }
 
+/* In Recommendations.tsx, the overall list (make it one row) */
+.genres ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* In Recommendations.tsx, the list entries (make them spaced apart) */
+.genres li {
+  background-color: #dadada;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 5px;
+}
+
 /* In Settings.tsx, the individual movies in each list */
 li {
   background-color: #f0f0f0;
@@ -78,6 +92,7 @@ li {
   width: 100%;
   height: auto;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 /* In Recommendations.tsx, the movie title */
 .movie-card p {
@@ -130,34 +145,48 @@ li {
   padding: 20px;
   border-radius: 10px;
   width: 500px;
-  height: 600px;
+  height: 610px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   overflow-y:auto;
 }
-/* In Recommendations.tsx, the four rows of content in the modal */
+/* In Recommendations.tsx, each of the 5 rows in the modal */
 .popup-row {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom:-5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /* In Recommendations.tsx, the movie poster in row 1 */
 .popup-poster {
-  width: 100%;
+  margin-top:10px;
+  width:200px;
   height: 300px;
   object-fit: contain;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
 }
-/* In Recommendations.tsx, the movie info in row 2 */
-.popup-info {
+/* In Recommendations.tsx, the title in row 2 */
+.popup-title h2 {
   text-align: center;
-}
-/* In Recommendations.tsx, the movie title in row 2 */
-.popup-info h2 {
-  font-size: 24px;
+  font-size: 32px;
   margin-bottom: 10px;
 }
-
+/* In Recommendations.tsx, the container of the rating and release date in row 3 */
+.popup-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/* In Recommendations.tsx, the rating and release date in row 3 */
+.popup-info-item {
+  width: 50%;
+  text-align: center;
+}
 
 /* In Recommendations.tsx, the space between each RecommendationSet */
 .recommendation-set {
