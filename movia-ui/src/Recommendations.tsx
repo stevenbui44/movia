@@ -226,12 +226,12 @@ const Recommendations:React.FC = () => {
             {set.recommendations.map((movie) => (
               <div key={movie.id} className="movie-card">
                 {/* 'x' button */}
-                <div className="dislike-button" onClickCapture={(e) => {
+                {popupMovie === null && (<div className="dislike-button" onClickCapture={(e) => {
                   e.stopPropagation()
                   putMovieInDislikedMovies(movie, set.originalMovie.id)
                 }}>
                   &times;
-                </div>
+                </div>)}
                 {/* movie poster */}
                 <div onClick={
                   () => openPopup(movie)
