@@ -18,12 +18,15 @@ const Settings:React.FC = () => {
   const [likedMovies, setLikedMovies] = useState<Movie[]>([]);
   const [dislikedMovies, setDislikedMovies] = useState<Movie[]>([]);
 
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   // useEffect hook: Get liked and disliked movies
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        // const likedResponse = await axios.get('http://localhost:5001/api/movies/liked');
-        // const dislikedResponse = await axios.get('http://localhost:5001/api/movies/disliked');
+        setLoading(true);
+        setError(null);
 
         // Step 1: Get liked movies from API
         try {
@@ -51,11 +54,15 @@ const Settings:React.FC = () => {
 
       } catch (error) {
         console.error('Error fetching movies:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchMovies();
   }, []);
 
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
   return (
     <div className="settings-container">
       <h1>Movie Settings</h1>
