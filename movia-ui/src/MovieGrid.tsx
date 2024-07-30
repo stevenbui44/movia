@@ -45,45 +45,45 @@ const MovieGrid = () => {
   // }, [selectedMovies]);
 
   // useEffect hook: Print out information on each movie when selected
-  // useEffect(() => {
-  //   if (selectedMovies.length > 0) {
-  //     // Get the last added movie ID
-  //     const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
-  //     const addedMovie = movies.find(movie => movie.id === lastAddedMovieId);
-  //     if (addedMovie) {
-  //       console.log("Added movie:", addedMovie);
-  //     }
-  //   } else {
-  //     // If selectedMovies is empty, a movie was just removed
-  //     console.log("All movies deselected");
-  //   }
-  // }, [selectedMovies, movies]);
-
   useEffect(() => {
-    const fetchAndLogKeywords = async (movieId: number) => {
-      try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-        );
-        const keywords = response.data.keywords.map((keyword: { name: string }) => keyword.name);
-        console.log(`Keywords for movie ${movieId}:`, keywords);
-      } catch (error) {
-        console.error('Error fetching keywords:', error);
-      }
-    };
-
     if (selectedMovies.length > 0) {
       // Get the last added movie ID
       const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
-      const movie = movies.find(m => m.id === lastAddedMovieId);
-      if (movie) {
-        fetchAndLogKeywords(movie.id);
+      const addedMovie = movies.find(movie => movie.id === lastAddedMovieId);
+      if (addedMovie) {
+        console.log("Added movie:", addedMovie);
       }
     } else {
       // If selectedMovies is empty, a movie was just removed
       console.log("All movies deselected");
     }
   }, [selectedMovies, movies]);
+
+  // useEffect hook: Get keywords for a movie
+  // useEffect(() => {
+  //   const fetchAndLogKeywords = async (movieId: number) => {
+  //     try {
+  //       const response = await axios.get(
+  //         `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+  //       );
+  //       const keywords = response.data.keywords.map((keyword: { name: string }) => keyword.name);
+  //       console.log(`Keywords for movie ${movieId}:`, keywords);
+  //     } catch (error) {
+  //       console.error('Error fetching keywords:', error);
+  //     }
+  //   };
+  //   if (selectedMovies.length > 0) {
+  //     // Get the last added movie ID
+  //     const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
+  //     const movie = movies.find(m => m.id === lastAddedMovieId);
+  //     if (movie) {
+  //       fetchAndLogKeywords(movie.id);
+  //     }
+  //   } else {
+  //     // If selectedMovies is empty, a movie was just removed
+  //     console.log("All movies deselected");
+  //   }
+  // }, [selectedMovies, movies]);
 
 
 

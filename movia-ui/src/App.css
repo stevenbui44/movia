@@ -4,7 +4,7 @@
 
 .App-header {
   background-color: #282c34;
-  padding: 20px;
+  padding: 10px;
   color: white;
   text-align: left;
 }
@@ -13,34 +13,82 @@
   margin: 0;
 }
 
+/* In MovieGrid.tsx, the size of the movie container */
 .container {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
 }
 
+/* In Settings.tsx, the individual movies in each list */
+li {
+  background-color: #f0f0f0;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* In Settings.tsx, the Liked Movies and Disliked Movies columns */
+.movie-columns {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* In MovieGrid.tsx, the grid itself with 4 movies per row */
 .Movie-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0px;
+  gap: 20px;
   padding: 20px;
 }
-
+/* In MovieGrid.tsx, each movie in the grid */
 .Movie-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 }
-
+/* In MovieGrid.tsx, each movie poster */
 .Movie-item img {
-  width: 200px;
-  height: 300px;
+  width: 160px;
+  height: 240px;
   object-fit: cover;
+  border-radius: 10px;
 }
-
+/* In MovieGrid.tsx, each movie title */
 .Movie-item p {
   margin-top: 10px;
   font-weight: bold;
+}
+/* In MovieGrid.tsx, a movie poster when you select it gets a green glow */
+.Movie-item.selected img {
+  transform: scale(1.01);
+  box-shadow: 0 0 5px 5px rgba(0, 255, 0, 0.7);
+}
+
+/* In Recommendations.tsx, the movie item itself */
+.movie-card {
+  margin-right: 20px;
+  text-align: center;
+  width: 200px;
+  cursor: pointer;
+}
+/* In Recommendations.tsx, the movie poster */
+.movie-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+/* In Recommendations.tsx, the movie title */
+.movie-card p {
+  margin-top: 10px;
+  font-weight: bold;
+}
+/* In Recommendations.tsx, a row for the RecommendationSet */
+.movie-row {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 20px;
 }
 
 .Next-button {
@@ -56,3 +104,94 @@
 .Next-button:hover {
   background-color: #0056b3;
 }
+
+.Next-button.disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* In Recommendations.tsx, making the page behind the popup darker */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* In Recommendations.tsx, the pop up box container */
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 500px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y:auto;
+}
+/* In Recommendations.tsx, the four rows of content in the modal */
+.popup-row {
+  width: 100%;
+  margin-bottom: 20px;
+}
+/* In Recommendations.tsx, the movie poster in row 1 */
+.popup-poster {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+}
+/* In Recommendations.tsx, the movie info in row 2 */
+.popup-info {
+  text-align: center;
+}
+/* In Recommendations.tsx, the movie title in row 2 */
+.popup-info h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+
+/* In Recommendations.tsx, the space between each RecommendationSet */
+.recommendation-set {
+  margin-bottom: 20px;
+}
+
+.Selected-movies-row {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background-color: rgba(200, 200, 200);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.Selected-movies-row img {
+  height: 80px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* In Settings.tsx, the unordered list (which contains li) */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+
