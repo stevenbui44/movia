@@ -35,6 +35,7 @@ type Genre = {
 type RecommendationSet = {
   originalMovie: Movie;
   recommendations: TMDBMovie[];
+  recommendationPool: TMDBMovie[];
 }
 
 // Main component
@@ -82,20 +83,17 @@ const Recommendations:React.FC = () => {
           `https://api.themoviedb.org/3/movie/${movie.tmdb_id}/recommendations?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
         );
 
-        // Step 2: Filter out movies in disliked list
-        const filteredDislikes = similarMoviesResponse.data.results.filter(
-          (recommendation) => !dislikedMoviesList.some((disliked) => disliked.tmdb_id === recommendation.id)
+        // // Step 2: Filter out movies in disliked and liked list
+        const filteredRecommendations = similarMoviesResponse.data.results.filter(recommendation => 
+          !dislikedMoviesList.some(disliked => disliked.tmdb_id === recommendation.id) &&
+          !likedMoviesList.some(liked => liked.tmdb_id === recommendation.id)
         );
 
-         // Step 3: Filter out movies in disliked list
-         const filteredLikes = filteredDislikes.filter(
-          (recommendation) => !likedMoviesList.some((liked) => liked.tmdb_id === recommendation.id)
-        );
-
-        // Step 4: Return the RecommendationSet
+        // Step 3: Return the RecommendationSet
         return {
           originalMovie: movie,
-          recommendations: filteredLikes.slice(0, 5)
+          recommendations: filteredRecommendations.slice(0, 5),
+          recommendationPool: filteredRecommendations.slice(5)
         };
       });
 
@@ -139,16 +137,48 @@ const Recommendations:React.FC = () => {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
-  // Function 6: Make a POST call with liked=false if the user presses the 'x' button
-  const putMovieInDislikedMovies = async (movie: TMDBMovie) => {
+  // Function 6: Make a POST call with liked=false if the user presses the 'x' button, as well as
+  // updates the RecommendedSet with a new movie
+  const putMovieInDislikedMovies = async (movie:TMDBMovie, setId:number) => {
     try {
-      await axios.post('http://localhost:5001/api/movies', {
+      const response = await axios.post('http://localhost:5001/api/movies', {
         tmdb_id: movie.id,
         title: movie.title,
         liked: false,
         rating: movie.vote_average,
         popularity: movie.popularity
       });
+      setDislikedMovies([...dislikedMovies, response.data]);
+    
+      // Turns all previous sets to new sets, where one set gets a new movie
+      setRecommendationSets(prevSets => 
+        prevSets.map(set => {
+          // if this is the set with the movie to replace
+          if (set.originalMovie.id === setId) {
+            // exclude the disliked movie
+            const updatedRecommendations = set.recommendations.filter(recommendation => recommendation.id !== movie.id);
+            if (set.recommendationPool.length > 0) {
+              // add the new movie
+              updatedRecommendations.push(set.recommendationPool[0]);
+              // return the new RecommendationSet
+              return {
+                ...set,
+                recommendations: updatedRecommendations,
+                recommendationPool: set.recommendationPool.slice(1)
+              };
+            }
+            else {
+              // return the set excluding the disliked movie and no replacement
+              return {
+                ...set,
+                recommendations: updatedRecommendations
+              };
+            }
+          }
+          return set;
+        })
+      );
+
     } catch (error) {
       console.error('Error disliking movie:', error);
     }
@@ -198,7 +228,7 @@ const Recommendations:React.FC = () => {
                 {/* 'x' button */}
                 <div className="dislike-button" onClickCapture={(e) => {
                   e.stopPropagation()
-                  putMovieInDislikedMovies(movie)
+                  putMovieInDislikedMovies(movie, set.originalMovie.id)
                 }}>
                   &times;
                 </div>
