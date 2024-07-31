@@ -38,6 +38,19 @@ type RecommendationSet = {
   recommendationPool: TMDBMovie[];
 }
 
+// A keyword for a movie
+type Keyword = {
+  id: number
+  name: string
+}
+
+// A set containing a movie's ID and its keywords
+type KeywordSet = {
+  movieId: number
+  keywords: Keyword[]
+}
+
+
 // Main component
 const Recommendations:React.FC = () => {
 
@@ -51,6 +64,9 @@ const Recommendations:React.FC = () => {
 
   const [dislikedMovies, setDislikedMovies] = useState<Movie[]>([]);
   const [likedMovies, setLikedMovies] = useState<Movie[]>([]);
+
+  const [selectedKeywords, setSelectedKeywords] = useState<{[key:number]: number}>({});
+  const [keywordSets, setKeywordSets] = useState<KeywordSet[]>([]);
 
 
   // useEffect hook: Gets genres + disliked/liked movies first, then all sets of movie recommendations
@@ -66,7 +82,6 @@ const Recommendations:React.FC = () => {
   const fetchLikedMoviesAndRecommendations = async () => {
     try {
       const dislikedMoviesList = await fetchDislikedMovies();
-      const likedMoviesList = await fetchLikedMovies();
 
       // JSON object of movies, headers, request, status
       const response = await axios.get<Movie[]>(
@@ -74,6 +89,19 @@ const Recommendations:React.FC = () => {
       );
       // Movie[] array of liked movies
       const likedMovies = response.data;
+
+
+      // for each Movie, get the keywords using TMDB API
+      const keywordPromises = likedMovies.map(async (movie) => {
+        const keywords = await fetchKeywords(movie.tmdb_id);
+        return { 
+          movieId: movie.tmdb_id, 
+          keywords 
+        };
+      });
+      const allKeywords = await Promise.all(keywordPromises);
+      setKeywordSets(allKeywords);
+      
 
       // Promise[]
       // for each Movie, get recommended TMDBMovies using TMDB API
@@ -86,7 +114,7 @@ const Recommendations:React.FC = () => {
         // // Step 2: Filter out movies in disliked and liked list
         const filteredRecommendations = similarMoviesResponse.data.results.filter(recommendation => 
           !dislikedMoviesList.some(disliked => disliked.tmdb_id === recommendation.id) &&
-          !likedMoviesList.some(liked => liked.tmdb_id === recommendation.id)
+          !likedMovies.some(liked => liked.tmdb_id === recommendation.id)
         );
 
         // Step 3: Return the RecommendationSet
@@ -196,7 +224,7 @@ const Recommendations:React.FC = () => {
     }
   };
 
-  // Function 7: Get and return user's liked movies
+  // Function 8: Get and return user's liked movies
   const fetchLikedMovies = async () => {
     try {
       const response = await axios.get<Movie[]>('http://localhost:5001/api/movies/liked');
@@ -207,6 +235,45 @@ const Recommendations:React.FC = () => {
       return []
     }
   };
+
+  // Function 9: Get a movie's keywords
+  const fetchKeywords = async (movieId:number) => {
+    try {
+      const response = await axios.get<{keywords:Keyword[]}>(
+        `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+      );
+      return response.data.keywords;
+    } catch (error) {
+      console.error('Error fetching keywords:', error);
+      return [];
+    }
+  };
+
+  // Function 10: Get recommended movies given a movie's keywords
+  const fetchMoviesByKeyword = async (keywordId:number, setId:number) => {
+    try {
+      // Step 1: Get movies given a keyword
+      const response = await axios.get<{ results:TMDBMovie[] }>(
+        `https://api.themoviedb.org/3/keyword/${keywordId}/movies?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+      );
+      // Step 2: Filter out liked and disliked movies
+      const filteredMovies = response.data.results.filter(movie => 
+        !dislikedMovies.some(disliked => disliked.tmdb_id === movie.id) &&
+        !likedMovies.some(liked => liked.tmdb_id === movie.id)
+      );
+      // Step 3: Update the RecommendationSet to show the new recommended movies
+      setRecommendationSets(prevSets => 
+        prevSets.map(set => 
+          set.originalMovie.id === setId 
+            ? { ...set, recommendations: filteredMovies.slice(0, 5) }
+            : set
+        )
+      );
+    } catch (error) {
+      console.error('Error fetching movies by keyword:', error);
+    }
+  };
+
 
 
 
@@ -219,7 +286,34 @@ const Recommendations:React.FC = () => {
       {/* Part 1: Body of the page */}
       {recommendationSets.map((set) => (
         <div key={set.originalMovie.id} className="recommendation-set">
-          <h2>Since you liked <i>{set.originalMovie.title}</i>...</h2>
+
+          {/* 1.1: The dropdown menu for keywords */}
+          <div className="recommendation-header">
+            <h2>Since you liked <i>{set.originalMovie.title}</i>...</h2>
+            <select 
+              value={selectedKeywords[set.originalMovie.id] || ''}
+              onChange={(e) => {
+                const keywordId = Number(e.target.value);
+                setSelectedKeywords({
+                  ...selectedKeywords, 
+                  [set.originalMovie.id]:keywordId
+                });
+                fetchMoviesByKeyword(keywordId, set.originalMovie.id);
+              }}
+            >
+              <option value="">Select a keyword</option>
+              {keywordSets
+                .find(keywordSet => keywordSet.movieId === set.originalMovie.tmdb_id)
+                ?.keywords.map(keyword => (
+                  <option key={keyword.id} value={keyword.id}>
+                    {keyword.name}
+                  </option>
+                ))
+              }
+            </select>
+          </div>
+
+          {/* 1.2: 5 recommended movies for each row */}
           <div className="movie-row">
 
             {/* for each movie, have the 'x' button and the movie poster */}

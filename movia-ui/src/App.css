@@ -212,6 +212,19 @@ li {
   text-align: center;
 }
 
+/* In Recommendations.tsx, the 'Since you liked [movie]' and the dropdown menu */
+.recommendation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+/* In Recommendations.tsx, the dropdown menu */
+.recommendation-header select {
+  padding: 5px;
+  font-size: 16px;
+}
+
 /* In Recommendations.tsx, the space between each RecommendationSet */
 .recommendation-set {
   margin-bottom: 20px;
