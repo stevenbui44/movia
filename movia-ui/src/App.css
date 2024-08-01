@@ -223,12 +223,19 @@ li {
 .recommendation-header select {
   padding: 5px;
   font-size: 16px;
+  margin-right: 10px;
+}
+
+/* In Recommendations.tsx, the keyword dropdown and shuffle button on the right side */
+.recommendation-header-right {
+  display: flex;
+  align-items: center;
 }
 
 /* In Recommendations.tsx, the space between each RecommendationSet */
-.recommendation-set {
+/* .recommendation-set {
   margin-bottom: 20px;
-}
+} */
 /* In Recommendations.tsx, the space between the RecommendationSet 'Since you liked' and the movie posters */
 .recommendation-set h2 {
   margin-bottom: 10px;
@@ -257,6 +264,32 @@ li {
   margin: 0 auto;
   padding: 20px;
 }
+
+
+
+.shuffle-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  margin-left:5px;
+  margin-right:10px
+}
+
+.shuffle-button svg {
+  width: 20px;
+  height: 20px;
+  fill: #555;
+}
+
+.shuffle-button:hover {
+  transform: scale(1.1);
+  opacity: 0.7;
+}
+
+
+
+
 
 /* In Settings.tsx, the unordered list (which contains li) */
 ul {
