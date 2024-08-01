@@ -28,7 +28,7 @@ const Settings:React.FC = () => {
         setLoading(true);
         setError(null);
 
-        // Step 1: Get liked movies from API
+        // Step 1: Get liked movies from your own API
         try {
           const likedResponse = await axios.get('http://localhost:5001/api/movies/liked');
           setLikedMovies(likedResponse.data);
@@ -40,7 +40,7 @@ const Settings:React.FC = () => {
           }
         }
 
-        // Step 2: Get disliked movies from API
+        // Step 2: Get disliked movies from your own API
         try {
           const dislikedResponse = await axios.get('http://localhost:5001/api/movies/disliked');
           setDislikedMovies(dislikedResponse.data);
@@ -70,20 +70,24 @@ const Settings:React.FC = () => {
         {/* Column 1: Liked movies */}
         <div className="movie-column">
           <h2>Liked Movies</h2>
-          <ul>
-            {likedMovies.map(movie => (
-              <li key={movie.id}>{movie.title}</li>
-            ))}
-          </ul>
+          <div className="scrollable-list">
+            <ul>
+              {likedMovies.map(movie => (
+                <li key={movie.id}>{movie.title}</li>
+              ))}
+            </ul>
+          </div>
         </div>
         {/* Column 2: Disliked movies */}
         <div className="movie-column">
           <h2>Disliked Movies</h2>
-          <ul>
-            {dislikedMovies.map(movie => (
-              <li key={movie.id}>{movie.title}</li>
-            ))}
-          </ul>
+          <div className="scrollable-list">
+            <ul>
+              {dislikedMovies.map(movie => (
+                <li key={movie.id}>{movie.title}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
