@@ -20,6 +20,23 @@
   padding: 20px;
 }
 
+/* In Settings.tsx, the delete button next to each movie */
+.delete-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 7px;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+}
+/* In Settings.tsx, hovering over the delete button indicates that it is clickable */
+.delete-button:hover {
+  color: #ff0000;
+}
+
+
 /* In Recommendations.tsx, the 'x' dislike button to the top right of each recommended  */
 .dislike-button {
   position: absolute;   /* Make button start in the top left corner rather than centered at the top*/
@@ -134,7 +151,7 @@ li {
 .movie-columns {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 60px;
 }
 /* In Settings.tsx, the liked and disliked columns have to be flex */
 .movie-column {
@@ -251,7 +268,7 @@ li {
 
 /* In Settings.tsx, the scrollable list containers for liked and disliked movies */
 .scrollable-list {
-  height: 100px;
+  height: 200px;
   overflow-y: auto;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -265,6 +282,7 @@ li {
 /* In Settings.tsx, the list ENTRIES themselves */
 .scrollable-list li {
   margin-bottom: 5px;
+  position: relative;
 }
 
 
