@@ -1,6 +1,7 @@
 import './App.css';
 import {useState} from "react";
 import {useEffect} from "react";
+import {useRef} from "react";
 import axios from 'axios';
 import {Link} from 'react-router-dom'
 
@@ -19,11 +20,14 @@ const MovieGrid = () => {
 
   // Part 1: Initialize the list of movies as an empty Movie[] array
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [selectedMovies, setSelectedMovies] = useState<Movie[]>([])
 
-  // Part 2: Initialize selected movies as an empty number[] array of movie IDs
-  const [selectedMovies, setSelectedMovies] = useState<number[]>([])
+  // Part 2: Terms and results when searching up a movie
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<Movie[]>([]);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // useEffect hook: Gets a list of top 20 movies one time when the program is rendered
+  // useEffect 1: Gets a list of top 20 movies one time when the program is rendered
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -39,91 +43,57 @@ const MovieGrid = () => {
     fetchMovies();
   }, []);
 
-  // usEffect hook: Print out selectedMovies every time it is updated
-  // useEffect(() => {
-  //   console.log(selectedMovies);
-  // }, [selectedMovies]);
-
-  // useEffect hook: Print out information on each movie when selected
+  // useEffect 2: Search up a movie in searchTerm with a short timeout
   useEffect(() => {
-    if (selectedMovies.length > 0) {
-      // Get the last added movie ID
-      const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
-      const addedMovie = movies.find(movie => movie.id === lastAddedMovieId);
-      if (addedMovie) {
-        console.log("Added movie:", addedMovie);
+    // CASE ONE: the user typed something in to search
+    if (searchTerm) {
+      // if there is already a timeout counting down, clear it
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
       }
-    } else {
-      // If selectedMovies is empty, a movie was just removed
-      console.log("All movies deselected");
+      // set a 300 ms timer before calling searchMovies()
+      searchTimeoutRef.current = setTimeout(() => {
+        searchMovies(searchTerm);
+      }, 500);
     }
-  }, [selectedMovies, movies]);
-
-  // useEffect hook: Get keywords for a movie
-  // useEffect(() => {
-  //   const fetchAndLogKeywords = async (movieId: number) => {
-  //     try {
-  //       const response = await axios.get(
-  //         `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-  //       );
-  //       const keywords = response.data.keywords.map((keyword: { name: string }) => keyword.name);
-  //       console.log(`Keywords for movie ${movieId}:`, keywords);
-  //     } catch (error) {
-  //       console.error('Error fetching keywords:', error);
-  //     }
-  //   };
-  //   if (selectedMovies.length > 0) {
-  //     // Get the last added movie ID
-  //     const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
-  //     const movie = movies.find(m => m.id === lastAddedMovieId);
-  //     if (movie) {
-  //       fetchAndLogKeywords(movie.id);
-  //     }
-  //   } else {
-  //     // If selectedMovies is empty, a movie was just removed
-  //     console.log("All movies deselected");
-  //   }
-  // }, [selectedMovies, movies]);
-
+    // the user did not type in any query
+    else {
+      setSearchResults([]);
+    }
+    // return () => {
+    // }
+  }, [searchTerm]);
 
 
   // Function 1: Function to select/deselect a movie
-  const toggleMovieSelection = (movieId:number) => {
-    // logMovieTitle(movieId);
+  const toggleMovieSelection = (movie: Movie) => {
     setSelectedMovies((prevSelected) => {
-      const isSelected = prevSelected.includes(movieId)
-      const updatedSelection = isSelected 
-        ? prevSelected.filter(id => id !== movieId)
-        : [...prevSelected, movieId]
-        return updatedSelection
-    })
+      const isSelected = prevSelected.some(m => m.id === movie.id);
+      if (isSelected) {
+        return prevSelected.filter(m => m.id !== movie.id);
+      } else {
+        return [...prevSelected, movie];
+      }
+    });
   }
 
   // Function 1.1: Helper function to print out the movie name given its ID
-  const logMovieTitle = (movieId: number) => {
-    const movie = movies.find(m => m.id === movieId);
-    if (movie) {
-      console.log(movieId, `: ${movie.title}`);
-    } else {
-      console.log(`No movie found with ID: ${movieId}`);
-    }
-  };
+  // const logMovieTitle = (movieId: number) => {
+  //   const movie = movies.find(m => m.id === movieId);
+  //   if (movie) {
+  //     console.log(movieId, `: ${movie.title}`);
+  //   } else {
+  //     console.log(`No movie found with ID: ${movieId}`);
+  //   }
+  // };
 
 
   // Function 2: Function to make POST calls when you press 'Next'
   const handleNext = async () => {
     try {
-      for (const movieId of selectedMovies) {
-        const movie = movies.find(m => m.id === movieId)
+      for (const movie of selectedMovies) {
         // if we can retrieve data (movie), then make the POST call
         if (movie) {
-          console.log('movie:', movie)
-          console.log('tmdb_id:', movie.id)
-          console.log('title:', movie.title)
-          console.log('liked:', true)
-          console.log('rating:', movie.vote_average)
-          console.log('popularity:', movie.popularity)
-          
           try {
             await axios.post('http://localhost:5001/api/movies', {
               tmdb_id: movie.id,
@@ -140,8 +110,6 @@ const MovieGrid = () => {
               console.error(`Error adding movie ${movie.title}:`, error)
             }
           }
-
-
         }
       }
     }
@@ -151,18 +119,54 @@ const MovieGrid = () => {
   }
 
 
+  // Function 3: Search up a movie using searchTerm
+  const searchMovies = async (query:string) => {
+    try {
+      // TMDB API call to search for a movie using the query
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=${query}`
+      );
+      setSearchResults(response.data.results.slice(0, 5));
+    } catch (error) {
+      console.error('Error searching movies:', error);
+    }
+  };
+
 
   // Part 4: HTML 
   return (
     <div className="container">
+
+      <div className="search-container">
+        {/* Lets you type into the textbox with onChange */}
+        <input 
+          type="text"
+          placeholder="Search for a movie..."
+          value={searchTerm}
+          onChange={
+            (e) => setSearchTerm(e.target.value)
+          }
+        />
+        {/* Gets the searched movies */}
+        {searchResults.length > 0 && (
+          <ul className="search-results">
+            {searchResults.map((movie) => (
+              <li key={movie.id} onClick={() => toggleMovieSelection(movie)}>
+                {movie.title}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
       <main className="Movie-grid">
         {movies.map((movie) => (
           // Each individual movie
           <div 
             key={movie.id} 
-            className={`Movie-item ${selectedMovies.includes(movie.id) ? 'selected' : ''}`}
+            className={`Movie-item ${selectedMovies.some(m => m.id === movie.id) ? 'selected' : ''}`}
             onClick= {
-              () => toggleMovieSelection(movie.id)
+              () => toggleMovieSelection(movie)
             }
           >
             {/* Movie poster */}
@@ -178,11 +182,10 @@ const MovieGrid = () => {
 
       {/* Row at bottom for selected movies */}
       <div className="Selected-movies-row">
-        {selectedMovies.map((id) => {
-          const movie = movies.find(m => m.id === id);
+        {selectedMovies.map((movie) => {
           return movie ? (
             <img 
-              key={id}
+              key={movie.id}
               src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
             />
           ) : null;
@@ -212,3 +215,49 @@ const MovieGrid = () => {
 }
 
 export default MovieGrid
+
+  // usEffect hook: Print out selectedMovies every time it is updated
+  // useEffect(() => {
+  //   console.log(selectedMovies);
+  // }, [selectedMovies]);
+
+  // useEffect hook: Get keywords for a movie
+  // useEffect(() => {
+  //   const fetchAndLogKeywords = async (movieId: number) => {
+  //     try {
+  //       const response = await axios.get(
+  //         `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+  //       );
+  //       const keywords = response.data.keywords.map((keyword: { name: string }) => keyword.name);
+  //       console.log(`Keywords for movie ${movieId}:`, keywords);
+  //     } catch (error) {
+  //       console.error('Error fetching keywords:', error);
+  //     }
+  //   };
+  //   if (selectedMovies.length > 0) {
+  //     // Get the last added movie ID
+  //     const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
+  //     const movie = movies.find(m => m.id === lastAddedMovieId);
+  //     if (movie) {
+  //       fetchAndLogKeywords(movie.id);
+  //     }
+  //   } else {
+  //     // If selectedMovies is empty, a movie was just removed
+  //     console.log("All movies deselected");
+  //   }
+  // }, [selectedMovies, movies]);
+
+  // useEffect hook: Print out information on each movie when selected
+  // useEffect(() => {
+  //   if (selectedMovies.length > 0) {
+  //     // Get the last added movie ID
+  //     const lastAddedMovieId = selectedMovies[selectedMovies.length - 1];
+  //     const addedMovie = movies.find(movie => movie.id === lastAddedMovieId);
+  //     if (addedMovie) {
+  //       console.log("Added movie:", addedMovie);
+  //     }
+  //   } else {
+  //     // If selectedMovies is empty, a movie was just removed
+  //     console.log("All movies deselected");
+  //   }
+  // }, [selectedMovies, movies]);
