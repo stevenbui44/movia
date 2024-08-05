@@ -126,11 +126,13 @@ const MovieGrid = () => {
       const response = await axios.get(
         `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=${query}`
       );
-      setSearchResults(response.data.results.slice(0, 5));
+      setSearchResults(response.data.results.slice(0, 20));
     } catch (error) {
       console.error('Error searching movies:', error);
     }
   };
+
+
 
 
   // Part 4: HTML 
@@ -152,7 +154,14 @@ const MovieGrid = () => {
           <ul className="search-results">
             {searchResults.map((movie) => (
               <li key={movie.id} onClick={() => toggleMovieSelection(movie)}>
-                {movie.title}
+
+                <img 
+                  className="movie-poster"
+                  src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
+                  alt={movie.title}
+                />
+                <span className="movie-title">{movie.title}</span>
+
               </li>
             ))}
           </ul>

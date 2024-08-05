@@ -93,6 +93,8 @@ li {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 20px;
+  padding-top: 40px;     /* Space for the search bar */
+  padding-bottom: 100px;  /* Space for the grey bar */
 }
 /* In MovieGrid.tsx, each movie in the grid */
 .Movie-item {
@@ -286,6 +288,7 @@ li {
 }
 
 
+/* In MovieGrid.tsx, the row at the bottom of the screen showing the selected movie posters */
 .Selected-movies-row {
   position: fixed;
   bottom: 0;
@@ -338,3 +341,56 @@ ul {
 }
 
 
+
+
+
+
+/* In MovieGrid.tsx, the container for the movie search bar */
+.search-container {
+  position: relative;
+  top: 10px;
+  left: 690px;
+  max-width: 25%;
+}
+/* In MovieGrid.tsx, the search bar for specific movies itself */
+.search-container input {
+  width: 100%;
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+/* In MovieGrid.tsx, making the search results wrapped and scrollable */
+.search-results {
+  position: absolute;
+  max-height: 400px;
+  overflow-y: auto;
+  width: 94%;
+  background-color: #e2e2e2;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+/* In MovieGrid.tsx, the movie search results */
+.search-results li {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background-color: white;
+}
+/* In MovieGrid.tsx, the movie search results get darker when you hover over them */
+.search-results li:hover {
+  background-color: #c9c9c9;
+}
+/* In MovieGrid.tsx, the movie search results' movie posters */
+.search-results .movie-poster {
+  width: 50px;
+  height: 75px;
+  margin-right: 10px;
+}
+/* In MovieGrid.tsx, the movie search results' movie titles */
+.search-results .movie-title {
+  font-weight: bold;
+}
