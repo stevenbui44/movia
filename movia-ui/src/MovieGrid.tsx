@@ -27,20 +27,13 @@ const MovieGrid = () => {
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Part 3: How many TMDB movie pages we've loaded so far
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+
   // useEffect 1: Gets a list of top 20 movies one time when the program is rendered
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        // TMDB API call to get popular movies
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_TMDB_API_KEY}&page=1`
-        );
-        setMovies(response.data.results);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      }
-    };
-    fetchMovies();
+    fetchMovies(1);
   }, []);
 
   // useEffect 2: Search up a movie in searchTerm with a short timeout
@@ -60,12 +53,34 @@ const MovieGrid = () => {
     else {
       setSearchResults([]);
     }
-    // return () => {
-    // }
   }, [searchTerm]);
 
 
-  // Function 1: Function to select/deselect a movie
+  // Function 1: Function to load the first 20 movies upon loading
+  const fetchMovies = async (page:number) => {
+    try {
+      setLoading(true);
+      // TMDB API call to get popular movies
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_TMDB_API_KEY}&page=${page}`
+      );
+      if (page === 1) {
+        setMovies(response.data.results);
+      }
+      else {
+        setMovies(prevMovies => [...prevMovies, ...response.data.results]);
+      }
+      setCurrentPage(page);
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
+
+  // Function 2: Function to select/deselect a movie
   const toggleMovieSelection = (movie: Movie) => {
     setSelectedMovies((prevSelected) => {
       const isSelected = prevSelected.some(m => m.id === movie.id);
@@ -88,7 +103,7 @@ const MovieGrid = () => {
   // };
 
 
-  // Function 2: Function to make POST calls when you press 'Next'
+  // Function 3: Function to make POST calls when you press 'Next'
   const handleNext = async () => {
     try {
       for (const movie of selectedMovies) {
@@ -119,7 +134,7 @@ const MovieGrid = () => {
   }
 
 
-  // Function 3: Search up a movie using searchTerm
+  // Function 4: Search up a movie using searchTerm
   const searchMovies = async (query:string) => {
     try {
       // TMDB API call to search for a movie using the query
@@ -130,6 +145,10 @@ const MovieGrid = () => {
     } catch (error) {
       console.error('Error searching movies:', error);
     }
+  };
+
+  const handleLoadMore = () => {
+    fetchMovies(currentPage + 1);
   };
 
 
@@ -188,6 +207,14 @@ const MovieGrid = () => {
           </div>
         ))}
       </main>
+
+      {/* Load more movies button */}
+      {!loading && (
+        <button className="load-more-button" onClick={handleLoadMore}>
+          Load More
+        </button>
+      )}
+      {loading && <div className="loading">Loading...</div>}
 
       {/* Row at bottom for selected movies */}
       <div className="Selected-movies-row">
