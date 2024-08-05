@@ -4,6 +4,8 @@ import {useEffect} from "react"
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRandom } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
 
 // Movie in the database
 type Movie = {
@@ -301,7 +303,15 @@ const Recommendations:React.FC = () => {
   if (error) return <div>Error: {error}</div>
   return (
     <div className="container">
-      <h1>Movie Recommendations</h1>
+      
+      <div className="header-container">
+        <h1>Movie Recommendations</h1>
+        <div className="settings-icon">
+          <Link to="/settings">
+            <FontAwesomeIcon icon={faEllipsisV} />
+          </Link>
+        </div>
+      </div>
 
       {/* Part 1: Body of the page */}
       {recommendationSets.map((set) => (

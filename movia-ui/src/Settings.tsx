@@ -2,6 +2,9 @@ import './App.css';
 import {useState} from "react";
 import {useEffect} from "react";
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHome } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
 
 type Movie = {
   id: number;
@@ -78,10 +81,18 @@ const Settings:React.FC = () => {
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
   return (
-    <div className="settings-container">
-      <h1>Movie Settings</h1>
-      <div className="movie-columns">
+    <div className="container">
 
+      <div className="header-container">
+        <h1>Movie Settings</h1>
+        <div className="home-icon">
+          <Link to="/recommendations">
+            <FontAwesomeIcon icon={faHome} />
+          </Link>
+        </div>
+      </div>
+
+      <div className="movie-columns">
         {/* Column 1: Liked movies */}
         <div className="movie-column">
           <h2>Liked Movies</h2>

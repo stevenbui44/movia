@@ -73,6 +73,28 @@
   border-radius: 5px;
 }
 
+/* In Recommendations.tsx and Settings.tsx, the header for the title and ellipsis/home */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* In Settings.tsx, the button to go to the Recommendations page */
+.home-icon a {
+  margin-right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #000000;
+  text-decoration: none;
+}
+/* In Settings.tsx, the button to go to the Recommendations page gets lighter when hovered */
+.home-icon a:hover {
+  color: #767676;
+}
+
+
 /* In Settings.tsx, the individual movies in each list */
 li {
   background-color: #f0f0f0;
@@ -396,10 +418,17 @@ li {
   border-radius: 5px;
 }
 
-.settings-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+/* In Recommendations.tsx, the ellipsis to go to the Settings page */
+.settings-icon a {
+  margin-right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #000000;
+  text-decoration: none;
+}
+/* In Recommendations.tsx, the ellipsis gets lighter when hovered over */
+.settings-icon a:hover {
+  color: #767676;
 }
 
 /* In Recommendations.tsx, the shuffle button area */
