@@ -4,6 +4,15 @@ Movia is a web application that allows users to select their favorite movies and
 
 ## Features
 
+- **Multi-factor Recommendation Algorithm**: Considers multiple factors (keywords, genre, etc.) in recommendations
+- **TMDB API Integration**: Access to an extensive, up-to-date movie database
+- **Movie Selection Interface**: Interactive grid for browsing and selecting movies
+- **Search Functionality**: Search for specific movies in addition to the movie grid
+- **Keyword Search**: Press a dropdown menu beside liked movies to find more movies with similar keywords
+- **Shuffle Functionality**: Press a shuffle button to get a new set of recommendations
+- **Movie Filtering**: Remove seen/disliked movies from recommendation feed
+- **Customizable Settings**: Remove liked and seen/disliked movies from the system to update the recommendation algorithm
+
 ## Tech Stack
 
 - **Frontend**: ReactJS, HTML, CSS, JavaScript, TypeScript
@@ -61,3 +70,17 @@ npm start
 
 ## Usage
 
+1. Open the application in localhost:3000
+- TODO: screenshot of the main grid page
+
+2. Select movies to get recommendations for from the grid or the search bar
+- TODO: screenshot of the page with movies from the grid selected and movies being searched in the search bar, movie posters in the bottom row
+
+3. Press Next to view personalized movie recommendations
+- TODO: screenshot of personalized movie recommendations
+
+4. Get more movie recommendations by browsing specific keywords or pressing 'x' to hide movies
+- TODO: screenshot of browswing specific keywords
+
+5. Go to the settings page to remove liked or disliked/seen movies
+- TODO: screenshot of the settings page
