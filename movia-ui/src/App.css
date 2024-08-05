@@ -3,17 +3,24 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #0f0e0e;
   padding: 10px;
-  color: white;
+  color: rgb(255, 83, 83);
   text-align: left;
+  padding: 15px 30px;
 }
 
 .App-header h1 {
   margin: 0;
 }
 
-/* In MovieGrid.tsx, the size of the movie container */
+/* In every file, the background is black and the text is white */
+body {
+  background-color: #141414;
+  color: #ffffff;
+}
+
+/* In every file, the size of the container */
 .container {
   max-width: 1000px;
   margin: 0 auto;
@@ -29,11 +36,12 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
+  background-color: transparent;
   color: #999;
 }
 /* In Settings.tsx, hovering over the delete button indicates that it is clickable */
 .delete-button:hover {
-  color: #ff0000;
+  color: #ff6565;
 }
 
 
@@ -42,9 +50,10 @@
   position: absolute;   /* Make button start in the top left corner rather than centered at the top*/
   top: -15px;
   right: -15px;
-  width: 30px;
-  height: 30px;
-  background-color: rgb(216, 216, 216);
+  width: 25px;
+  height: 25px;
+  background-color: rgb(75, 75, 75);
+  color: rgb(194, 194, 194);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -55,7 +64,7 @@
 }
 /* In Recommendations.tsx, the 'x' dislike button gets darker when you hover over it */
 .dislike-button:hover {
-  background-color:  rgb(181, 181, 181);
+  background-color:  rgb(104, 104, 104)
 }
 
 
@@ -67,10 +76,17 @@
 }
 /* In Recommendations.tsx, the list entries (make them spaced apart) */
 .genres li {
-  background-color: #dadada;
+  background-color: #767676;
   padding: 5px 10px;
   margin: 5px;
   border-radius: 5px;
+}
+
+/* In every file, I think this font looks good */
+h1, h2, p, li {
+  /* font-family: 'Almarai', arial; */
+  /* font-family: 'Lexend Deca', arial; */
+  font-family: 'Work Sans', arial;
 }
 
 /* In Recommendations.tsx and Settings.tsx, the header for the title and ellipsis/home */
@@ -78,20 +94,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
+/* In Recommendations.tsx and Settings.tsx, the header title */
+.header-container h1 {
+  font-size: 0em;
+  color: rgb(255, 83, 83);
+}
 
 /* In Settings.tsx, the button to go to the Recommendations page */
 .home-icon a {
   margin-right: 20px;
   font-size: 24px;
   cursor: pointer;
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
 }
 /* In Settings.tsx, the button to go to the Recommendations page gets lighter when hovered */
 .home-icon a:hover {
-  color: #767676;
+  color: #cacaca;
 }
 
 
@@ -108,28 +130,37 @@ li {
 .load-more-button {
   display: block;
   margin: 0px auto;
-  /* padding: 15px 30px; */
   padding: 12px;
   width: 50%;
   font-size: 16px;
-  background-color: #dfdfdf;
+  background-color: #707070;
+  color: rgb(208, 208, 208);
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.1s;
   margin-bottom: 140px;
   margin-top: 20px;
+  font-family: 'Work Sans', arial;
 }
 /* In MovieGrid.tsx, the Load More button gets darker when you hover over it */
 .load-more-button:hover {
-  background-color: #b9b9b9;
+  background-color: #4f4f4f;
 }
 
-
-/* In Settings.tsx, the Liked Movies and Disliked Movies columns */
+/* In Settings.tsx, the liked and disliked column widths */
 .movie-columns {
   display: flex;
   justify-content: space-between;
+  gap: 60px;
+}
+/* In Settings.tsx, the liked and disliked columns have to be flex */
+.movie-column {
+  flex: 1;
+}
+/* In Settings.tsx, the Liked and Disliked Movies titles should be centered */
+.movie-column h2 {
+  text-align: center;
 }
 
 /* In MovieGrid.tsx, the grid itself with 4 movies per row */
@@ -154,6 +185,7 @@ li {
   height: 240px;
   object-fit: cover;
   border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 /* In MovieGrid.tsx, each movie title */
 .Movie-item p {
@@ -164,7 +196,7 @@ li {
 /* In MovieGrid.tsx, a movie poster when you select it gets a green glow */
 .Movie-item.selected img {
   transform: scale(1.01);
-  box-shadow: 0 0 5px 5px rgba(0, 255, 0, 0.7);
+  box-shadow: 0 0 5px 5px rgba(77, 178, 77, 0.7);
 }
 
 /* In Recommendations.tsx, the movie item itself */
@@ -181,7 +213,7 @@ li {
   width: 100%;
   height: auto;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 /* In Recommendations.tsx, the movie title */
 .movie-card p {
@@ -195,34 +227,23 @@ li {
   padding-bottom: 20px;
 }
 
-/* In Settings.tsx, the liked and disliked column widths */
-.movie-columns {
-  display: flex;
-  justify-content: space-between;
-  gap: 60px;
-}
-/* In Settings.tsx, the liked and disliked columns have to be flex */
-.movie-column {
-  flex: 1;
-}
-
-
 /* In MovieGrid.tsx, the Next button while it is enabled */
 .Next-button {
   position: fixed;    /* Follows the user's screen */
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 24px;
-  background-color: #ffffff;
-  color: #333;
+  bottom: 25px;
+  right: 0px;
+  padding: 10px 18px;
+  background-color: #a1a1a1;
+  color: #222222;
   margin-bottom: 7px;
   margin-right: 30px;
   border-radius: 4px;
-  font-size: 18px;
+  font-size: 14px;
   text-decoration: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.1s ease;
   cursor: pointer;
+  font-family: 'Work Sans', arial;
 }
 /* In MovieGrid.tsx, the Next button gets darker when you hover over it */
 .Next-button:hover {
@@ -230,7 +251,7 @@ li {
 }
 /* In MovieGrid.tsx, the Next button is disabled when no movies are selected */
 .Next-button.disabled {
-  background-color: #cccccc;
+  background-color: #727272;
   color: #666666;
   cursor: not-allowed;
   opacity: 0.8;
@@ -251,7 +272,7 @@ li {
 }
 /* In Recommendations.tsx, the pop up box container */
 .popup-content {
-  background-color: white;
+  background-color: rgb(25, 25, 25);
   padding: 20px;
   border-radius: 10px;
   width: 500px;
@@ -261,6 +282,7 @@ li {
   justify-content: center;
   align-items: center;
   overflow-y:auto;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
 }
 /* In Recommendations.tsx, each of the 5 rows in the modal */
 .popup-row {
@@ -278,7 +300,6 @@ li {
   object-fit: contain;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
 }
 /* In Recommendations.tsx, the title in row 2 */
 .popup-title h2 {
@@ -310,6 +331,12 @@ li {
   padding: 5px;
   font-size: 16px;
   margin-right: 10px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  background-color: rgb(75, 75, 75);
+  color: rgb(213, 213, 213);
+  font-family: 'Work Sans', arial;
 }
 
 /* In Recommendations.tsx, the keyword dropdown and shuffle button on the right side */
@@ -320,7 +347,7 @@ li {
 
 /* In Recommendations.tsx, the space between rows of recommendation sets */
 .recommendation-set {
-  margin-bottom: 20px;
+  padding-bottom: 30px;
 }
 /* In Recommendations.tsx, the space between the RecommendationSet 'Since you liked' and the movie posters */
 .recommendation-set h2 {
@@ -328,11 +355,12 @@ li {
 }
 
 
+
 /* In Settings.tsx, the scrollable list containers for liked and disliked movies */
 .scrollable-list {
-  height: 200px;
+  height: 400px;
   overflow-y: auto;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: 5px;
   padding: 10px;
   margin-top: 10px;
@@ -340,11 +368,17 @@ li {
 /* In Settings.tsx, the LIST itself */
 .scrollable-list ul {
   margin: 0;
+  padding: 5px;
 }
 /* In Settings.tsx, the list ENTRIES themselves */
 .scrollable-list li {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   position: relative;
+  background-color: #474747;
+  padding: 12px 15px;
+}
+.scrollable-list li:hover {
+  background-color: #333;
 }
 
 
@@ -360,19 +394,24 @@ li {
   width: 100%;
   padding: 6px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: none;
+  outline: none;
   border-radius: 4px;
+  background-color: rgb(75, 75, 75);
+  color: rgb(213, 213, 213);
+  font-family: 'Work Sans', arial;
 }
 /* In MovieGrid.tsx, making the search results wrapped and scrollable */
 .search-results {
   position: absolute;
-  max-height: 400px;
+  max-height: 405px;
   overflow-y: auto;
-  width: 94%;
-  background-color: #e2e2e2;
+  width: 150%;
+  right: -12px;
+  background-color: #2b2b2b;
   padding: 15px;
   border-radius: 4px;
-  margin: 0;
+  margin-top: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 /* In MovieGrid.tsx, the movie search results */
@@ -381,11 +420,12 @@ li {
   cursor: pointer;
   display: flex;
   align-items: center;
-  background-color: white;
+  background-color: rgb(87, 87, 87);
+  color: rgb(234, 234, 234);
 }
 /* In MovieGrid.tsx, the movie search results get darker when you hover over them */
 .search-results li:hover {
-  background-color: #c9c9c9;
+  background-color: #767676;
 }
 /* In MovieGrid.tsx, the movie search results' movie posters */
 .search-results .movie-poster {
@@ -406,10 +446,11 @@ li {
   left: 0;
   right: 0;
   height: 100px;
-  background-color: rgba(200, 200, 200, 0.8);
+  background-color: rgba(38, 38, 38, 0.99);
   display: flex;
   align-items: center;
   padding: 0 20px;
+  overflow-x: auto;
 }
 
 .Selected-movies-row img {
@@ -423,12 +464,12 @@ li {
   margin-right: 20px;
   font-size: 24px;
   cursor: pointer;
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
 }
 /* In Recommendations.tsx, the ellipsis gets lighter when hovered over */
 .settings-icon a:hover {
-  color: #767676;
+  color: #a3a3a3;
 }
 
 /* In Recommendations.tsx, the shuffle button area */
@@ -444,12 +485,14 @@ li {
 .shuffle-button svg {
   width: 20px;
   height: 20px;
-  fill: #555;
+  /* fill: #555; */
+  /* color:#ffffff; */
+  color: rgb(255, 116, 116);
 }
 /* In Recommendations.tsx, the shuffle button icon gets larger when you hover over it */
 .shuffle-button:hover {
   transform: scale(1.1);
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 /* In Settings.tsx, the unordered list (which contains li) */

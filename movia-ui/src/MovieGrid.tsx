@@ -157,7 +157,7 @@ const MovieGrid = () => {
   // Part 4: HTML 
   return (
     <div className="container">
-
+      
       <div className="search-container">
         {/* Lets you type into the textbox with onChange */}
         <input 
@@ -241,10 +241,10 @@ const MovieGrid = () => {
               e.preventDefault()
               handleNext()
             }}> */}
-          Next
+          Generate Recommendations
         </Link>
       ) : (
-        <span className="Next-button disabled">Next</span>
+        <span className="Next-button disabled">Generate Recommendations</span>
       )}
     </div>
   );

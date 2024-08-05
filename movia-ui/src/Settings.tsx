@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 
 type Movie = {
   id: number;
+  poster_path?: string;
   tmdb_id: number;
   title: string;
   liked: boolean;
@@ -84,7 +85,7 @@ const Settings:React.FC = () => {
     <div className="container">
 
       <div className="header-container">
-        <h1>Movie Settings</h1>
+        <h1>Your Movie Preferences</h1>
         <div className="home-icon">
           <Link to="/recommendations">
             <FontAwesomeIcon icon={faHome} />
@@ -95,7 +96,7 @@ const Settings:React.FC = () => {
       <div className="movie-columns">
         {/* Column 1: Liked movies */}
         <div className="movie-column">
-          <h2>Liked Movies</h2>
+          <h2>Included in Recommendations:</h2>
           <div className="scrollable-list">
             <ul>
               {likedMovies.map(movie => (
@@ -110,7 +111,7 @@ const Settings:React.FC = () => {
 
         {/* Column 2: Disliked movies */}
         <div className="movie-column">
-          <h2>Disliked Movies</h2>
+          <h2>Excluded in Recommendations:</h2>
           <div className="scrollable-list">
             <ul>
               {dislikedMovies.map(movie => (

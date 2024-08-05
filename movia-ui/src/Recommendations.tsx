@@ -305,7 +305,7 @@ const Recommendations:React.FC = () => {
     <div className="container">
       
       <div className="header-container">
-        <h1>Movie Recommendations</h1>
+        <h1>Our Recommended Picks for You</h1>
         <div className="settings-icon">
           <Link to="/settings">
             <FontAwesomeIcon icon={faEllipsisV} />
