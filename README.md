@@ -4,7 +4,7 @@ Movia is a web application that allows users to select their favorite movies and
 
 ## Features
 
-- **Multi-factor Recommendation Algorithm**: Considers multiple factors (keywords, genre, etc.) in recommendations
+- **Multi-factor Recommendation Algorithm**: Considers multiple factors (keywords, release date, popularity etc.) in recommendations
 - **TMDB API Integration**: Access to an extensive, up-to-date movie database
 - **Movie Selection Interface**: Interactive grid for browsing and selecting movies
 - **Search Functionality**: Search for specific movies in addition to the movie grid
@@ -71,16 +71,19 @@ npm start
 ## Usage
 
 1. Open the application in localhost:3000
-- TODO: screenshot of the main grid page
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/49992004-6a7f-4141-ba6f-edeacb176c2c">
 
 2. Select movies to get recommendations for from the grid or the search bar
-- TODO: screenshot of the page with movies from the grid selected and movies being searched in the search bar, movie posters in the bottom row
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/47ff1972-c82c-4e45-b896-d672b530ad1f">
 
 3. Press Next to view personalized movie recommendations
-- TODO: screenshot of personalized movie recommendations
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/aa97a181-f63a-4d76-bbed-717eba5bee5f">
 
 4. Get more movie recommendations by browsing specific keywords or pressing 'x' to hide movies
-- TODO: screenshot of browswing specific keywords
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/17f57107-559c-4947-a436-af17cc174c89">
 
-5. Go to the settings page to remove liked or disliked/seen movies
-- TODO: screenshot of the settings page
+5. See more details about recommended movies by clicking on them
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/46026ab7-b136-4639-87dc-763a7dbe6e5b">
+
+6. Go to the settings page to remove liked or disliked/seen movies to update recommendation algorithm
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/a56d9711-0539-4435-95ef-8ef645dc38e3">
