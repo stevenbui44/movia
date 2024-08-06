@@ -94,7 +94,6 @@ const Recommendations:React.FC = () => {
       // Movie[] array of liked movies
       const likedMovies = response.data
 
-
       // for each Movie, get the keywords using TMDB API
       const keywordPromises = likedMovies.map(async (movie) => {
         const keywords = await fetchKeywords(movie.tmdb_id)
@@ -298,8 +297,17 @@ const Recommendations:React.FC = () => {
     )
   }
 
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">Loading recommendations...</p>
+        </div>
+      </div>
+    );
+  }
 
-  if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
   return (
     <div className="container">

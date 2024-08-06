@@ -79,7 +79,17 @@ const Settings:React.FC = () => {
     }
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">Loading preferences...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (error) return <div>Error: {error}</div>
   return (
     <div className="container">
