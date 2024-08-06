@@ -435,6 +435,10 @@ const Recommendations:React.FC = () => {
         </div>
       )}
 
+      <footer className="footer">
+        <p>&copy; 2024 Movia</p>
+      </footer>
+
     </div>
   )
 }
